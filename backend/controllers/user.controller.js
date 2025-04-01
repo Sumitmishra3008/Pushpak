@@ -14,23 +14,31 @@ module.exports.registerUser = async (req, res) => {
   if (userExist) {
     return res.status(400).json({ message: "User already exists" });
   }
-  console.log(user.comparepassword);
-  //   const hashPassword = await user.hashPassword(password);
-  const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await userservice.createUser(
+  // console.log(user.comparepassword);
+  // const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = new user({
+    fullname: {
+      firstname: fullname.firstname,
+      lastname: fullname.lastname,
+    },
+    email,
+  });
+  const hashPassword2 = await newUser.createhash(password);
+  newUser.password = hashPassword2;
+  const newUser2 = await userservice.createUser(
     fullname.firstname,
     fullname.lastname,
     email,
-    hashPassword
+    hashPassword2
   );
   const token = await newUser.generateAuthToken();
   res.status(201).json({
     message: "User registered successfully",
     token,
     user: {
-      id: newUser._id,
-      fullname: newUser.fullname,
-      email: newUser.email,
+      id: newUser2._id,
+      fullname: newUser2.fullname,
+      email: newUser2.email,
     },
   });
 };

@@ -33,14 +33,12 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.comparePassword = async function (password) {
-  const isMatch = await bcrypt.compare(password, this.password);
-  return isMatch;
+  return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.hashPassword = async function (password) {
+userSchema.methods.createhash = async function (password) {
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
+  return await bcrypt.hash(password, salt);
 };
 
 userSchema.methods.generateAuthToken = async function () {
