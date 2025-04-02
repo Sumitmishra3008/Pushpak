@@ -42,7 +42,9 @@ userSchema.methods.createhash = async function (password) {
 };
 
 userSchema.methods.generateAuthToken = async function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: "24h",
+  });
   return token;
 };
 
