@@ -10,7 +10,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const userRoutes = require("./routes/user.routes.js");
+const captainRoutes = require("./routes/captain.routes.js");
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/captain", captainRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
