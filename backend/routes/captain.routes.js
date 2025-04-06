@@ -21,4 +21,19 @@ router.post(
   captaincontroller.registerCaptain
 );
 
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Please enter a valid email"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
+  captaincontroller.loginCaptain
+);
+
 module.exports = router;
+
+router.get("/getcaptain", captainAuthMiddleware, captaincontroller.getCaptain);
+
+router.get("/logout", captainAuthMiddleware, captaincontroller.logoutCaptain);
