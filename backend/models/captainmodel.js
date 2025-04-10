@@ -58,6 +58,14 @@ const captainSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  location: {
+    ltd: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
 });
 
 captainSchema.methods.createhash = async function (password) {
