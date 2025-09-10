@@ -4,6 +4,12 @@ const { body } = require("express-validator");
 const { Captain } = require("../models/captainmodel");
 const captaincontroller = require("../controllers/captain.controller");
 const captainAuthMiddleware = require("../middlewares/captain.middleware");
+const cors = require("cors");
+
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(cors());
+
 router.post(
   "/register",
   [

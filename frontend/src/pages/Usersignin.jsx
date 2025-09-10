@@ -2,13 +2,14 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 function UserSignin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //   const [newUser, setNewUser] = useState({});
-  const submithandler = (e) => {
+  const submithandler = async (e) => {
     e.preventDefault();
     const newUser = {
       email: email,
@@ -16,7 +17,24 @@ function UserSignin() {
     };
     console.log(newUser);
     // setNewUser(newUser);
-    console.log("User created successfully!");
+
+    let message = "";
+    const response = await axios
+      .post("http://localhost:3000/api/v1/user/login", newUser)
+      .catch((err) => {
+        message = err.response.data.message;
+        console.log("Err: ", err);
+      });
+
+    if (response) {
+      const data = response.data;
+      console.log("User logged in successfully!");
+      navigate("/");
+    } else {
+      console.log(message);
+      console.log("User login failed");
+    }
+    console.log(response);
     setEmail("");
     setPassword("");
   };

@@ -6,8 +6,11 @@ const bcrypt = require("bcrypt");
 const { blacklisttoken } = require("../models/blacklisttoken");
 
 module.exports.registerCaptain = async (req, res) => {
+  console.log(req.body);
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
+    console.log(errors.array());
     return res.status(422).json({ errors: errors.array() });
   }
   const { fullname, email, password, vehicle } = req.body;

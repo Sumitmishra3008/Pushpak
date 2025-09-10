@@ -5,6 +5,11 @@ const usercontroller = require("../controllers/user.controller.js");
 router.use(express.json());
 const User = require("../models/usermodel.js");
 const authmiddleware = require("../middlewares/auth.middleware.js");
+const cors = require("cors");
+
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+router.use(cors());
 
 router.post(
   "/register",

@@ -2,6 +2,8 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Home from "./Home";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 function UserSignup() {
@@ -9,13 +11,16 @@ function UserSignup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   //   const [newUser, setNewUser] = useState({});
-  const submithandler = (e) => {
+  const submithandler = async (e) => {
     e.preventDefault();
     const newUser = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
+      },
       email: email,
-      firstName: firstName,
-      lastName: lastName,
       password: password,
     };
     console.log(newUser);
@@ -25,8 +30,24 @@ function UserSignup() {
     setFirstName("");
     setLastName("");
     setPassword("");
+    let message = "";
+    const response = await axios
+      .post("http://localhost:3000/api/v1/user/register", newUser)
+      .catch((err) => {
+        message = err.response.data.message;
+        console.log("Err: ", err);
+      });
+    if (response) {
+      console.log("user registered");
+      const data = response.data;
+      // console.log(data.token);
+      navigate("/");
+    } else {
+      console.log(message);
+      console.log("User registration failed");
+    }
   };
-  const navigate = useNavigate();
+
   return (
     <div class="h-screen w-full flex flex-col justify-between">
       <div class="bg-black text-3xl text-white px-8 py-4 font-semibold w-full">

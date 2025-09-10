@@ -2,6 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 function CaptainSignup() {
@@ -17,12 +18,14 @@ function CaptainSignup() {
   const [vehicleColor, setVehicleColor] = useState("");
 
   //   const [newUser, setNewUser] = useState({});
-  const submithandler = (e) => {
+  const submithandler = async (e) => {
     e.preventDefault();
     const newCaptain = {
       email: email,
-      firstName: firstName,
-      lastName: lastName,
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
+      },
       password: password,
       vehicle: {
         vehicletype: vehicleType,
@@ -34,8 +37,25 @@ function CaptainSignup() {
       },
     };
     console.log(newCaptain);
+    let message = "";
+    const response = await axios
+      .post("http://localhost:3000/api/v1/captain/register", newCaptain)
+      .catch((err) => {
+        message = err.response.data.message;
+        console.log("Err: ", err);
+      });
+    if (response) {
+      const data = response.data;
+      console.log("Captain registered successfully!");
+      // console.log(data.token);
+      navigate("/");
+    } else {
+      console.log(message);
+      console.log("Captain registration failed");
+    }
+
     // setNewUser(newUser);
-    console.log("User created successfully!");
+
     setEmail("");
     setFirstName("");
     setLastName("");
@@ -94,14 +114,29 @@ function CaptainSignup() {
         />
         <p class="font-semibold">Enter your vehicle details.</p>
         <div class="flex display-col gap-3  w-full">
-          <input
+          {/* <input
             type="text"
             placeholder="car/bike/auto"
-            class="w-1/2 border-white  rounded-md px-4 py-2 mb-4 bg-[#EEEEEE]"
+            
             required
             value={vehicleType}
             onChange={(e) => setVehicleType(e.target.value)}
-          />
+          /> */}
+          <select
+            required
+            class="w-1/2 border-white  rounded-md px-4 py-2 mb-4 bg-[#EEEEEE]"
+            value={vehicleType}
+            onChange={(e) => {
+              setVehicleType(e.target.value);
+            }}
+          >
+            <option value="" disabled>
+              Select Vehicle Type
+            </option>
+            <option value="car">Car</option>
+            <option value="auto">Auto</option>
+            <option value="bike">Bike</option>
+          </select>
           <input
             type="number"
             placeholder="vehicle capacity"

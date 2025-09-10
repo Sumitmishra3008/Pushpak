@@ -2,6 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 function CaptainSignin() {
@@ -15,8 +16,22 @@ function CaptainSignin() {
       password: password,
     };
     console.log(newUser);
+    let message = "";
+    const response = axios
+      .post("http://localhost:3000/api/v1/captain/login", newUser)
+      .catch((err) => {
+        message = err.response.data.message;
+        console.log("Err: ", err);
+      });
+    if (response) {
+      const data = response.data;
+      navigate("/");
+    } else {
+      console.log(message);
+      console.log("Captain login failed");
+    }
     // setNewUser(newUser);
-    console.log("User created successfully!");
+    console.log("Captain logged in successfully!");
     setEmail("");
     setPassword("");
   };
