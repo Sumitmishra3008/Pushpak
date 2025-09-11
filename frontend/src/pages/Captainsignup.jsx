@@ -1,8 +1,10 @@
 // import { set } from "mongoose";
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { CaptainDataContext } from "../context/CaptainDataContext";
+import { set } from "zod/v4";
 // import { useNavigate } from "react-router-dom";
 
 function CaptainSignup() {
@@ -16,6 +18,8 @@ function CaptainSignup() {
   const [vehicleModel, setVehicleModel] = useState("");
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [vehicleColor, setVehicleColor] = useState("");
+  const { captainData, setCaptainData } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
   //   const [newUser, setNewUser] = useState({});
   const submithandler = async (e) => {
@@ -47,8 +51,10 @@ function CaptainSignup() {
     if (response) {
       const data = response.data;
       console.log("Captain registered successfully!");
+      localStorage.setItem("token", data.token);
+      setCaptainData(newCaptain);
       // console.log(data.token);
-      navigate("/");
+      navigate("/captainhome");
     } else {
       console.log(message);
       console.log("Captain registration failed");
@@ -67,7 +73,6 @@ function CaptainSignup() {
     setVehicleNumber("");
     setVehicleColor("");
   };
-  const navigate = useNavigate();
   return (
     <div class="h-screen w-full flex flex-col justify-between">
       <div class="bg-black text-3xl text-white px-8 py-4 font-semibold w-full">

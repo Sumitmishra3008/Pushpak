@@ -1,15 +1,19 @@
 // import { set } from "mongoose";
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { CaptainDataContext } from "../context/CaptainDataContext";
 // import { useNavigate } from "react-router-dom";
 
 function CaptainSignin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { captainData, setCaptainData } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
+
   //   const [newUser, setNewUser] = useState({});
-  const submithandler = (e) => {
+  const submithandler = async (e) => {
     e.preventDefault();
     const newUser = {
       email: email,
@@ -17,7 +21,7 @@ function CaptainSignin() {
     };
     console.log(newUser);
     let message = "";
-    const response = axios
+    const response = await axios
       .post("http://localhost:3000/api/v1/captain/login", newUser)
       .catch((err) => {
         message = err.response.data.message;
@@ -25,7 +29,10 @@ function CaptainSignin() {
       });
     if (response) {
       const data = response.data;
-      navigate("/");
+      console.log(data);
+      localStorage.setItem("token", data.token);
+      setCaptainData(data.captain);
+      navigate("/captainhome");
     } else {
       console.log(message);
       console.log("Captain login failed");
@@ -35,7 +42,6 @@ function CaptainSignin() {
     setEmail("");
     setPassword("");
   };
-  const navigate = useNavigate();
   return (
     <div class="h-screen w-full flex flex-col justify-between">
       <div class="bg-black text-3xl text-white px-8 py-4 font-semibold w-full">
