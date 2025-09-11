@@ -29,6 +29,7 @@ function UserSignin() {
     if (response) {
       const data = response.data;
       console.log("User logged in successfully!");
+      localStorage.setItem("token", data.token);
       navigate("/");
     } else {
       console.log(message);

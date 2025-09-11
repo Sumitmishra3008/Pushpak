@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Home from "./Home";
 import axios from "axios";
+import { useContext } from "react";
+import { Userdatacontext } from "../context/Userdatacontext.jsx";
 // import { useNavigate } from "react-router-dom";
 
 function UserSignup() {
@@ -12,6 +14,8 @@ function UserSignup() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const { user, setUser } = useContext(Userdatacontext);
   //   const [newUser, setNewUser] = useState({});
   const submithandler = async (e) => {
     e.preventDefault();
@@ -38,9 +42,11 @@ function UserSignup() {
         console.log("Err: ", err);
       });
     if (response) {
+      setUser(newUser);
       console.log("user registered");
       const data = response.data;
       // console.log(data.token);
+      localStorage.setItem("token", data.token);
       navigate("/");
     } else {
       console.log(message);
