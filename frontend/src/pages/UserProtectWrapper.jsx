@@ -11,8 +11,8 @@ const UserProtectWrapper = ({ children }) => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/usersignin");
-      console.log("No token found, redirecting to signin.");
+      navigate("/usersignup");
+      console.log("No token found, redirecting to signup.");
     }
 
     axios
@@ -27,7 +27,7 @@ const UserProtectWrapper = ({ children }) => {
       })
       .catch((error) => {
         localStorage.removeItem("token");
-        navigate("/usersignin");
+        navigate("/usersignup");
         console.error("Error fetching user data:", error);
       });
   }, [token]);

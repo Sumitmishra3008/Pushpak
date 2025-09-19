@@ -47,7 +47,7 @@ function UserSignup() {
       const data = response.data;
       // console.log(data.token);
       localStorage.setItem("token", data.token);
-      navigate("/");
+      navigate("/userhome");
     } else {
       console.log(message);
       console.log("User registration failed");

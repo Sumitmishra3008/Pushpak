@@ -30,7 +30,7 @@ function UserSignin() {
       const data = response.data;
       console.log("User logged in successfully!");
       localStorage.setItem("token", data.token);
-      navigate("/");
+      navigate("/userhome");
     } else {
       console.log(message);
       console.log("User login failed");

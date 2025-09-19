@@ -11,17 +11,19 @@ import UserSignin from "./pages/Usersignin";
 import UserProtectWrapper from "./pages/UserProtectWrapper";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
 import CaptainHome from "./pages/CaptainHome";
+import UserHome from "./pages/UserHome";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route
-        path="/"
+        path="/userhome"
         element={
           <UserProtectWrapper>
-            <Home />
+            <UserHome />
           </UserProtectWrapper>
         }
       />
