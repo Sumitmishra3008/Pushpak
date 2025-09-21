@@ -3,7 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
-import { set } from "zod/v4";
+import LocationSearchPanel from "../components/LocationSearchPanel";
+import VehiclePanel from "../components/VehiclePanel";
+import ConfirmRide from "../components/ConfirmRide";
 
 function UserHome() {
   const panelRef = useRef(null);
@@ -11,6 +13,23 @@ function UserHome() {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
+  const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
+  const [pickupSuggestions, setPickupSuggestions] = useState([
+    "Delhi",
+    "Mumbai",
+    "Bangalore",
+  ]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState([
+    "Chennai",
+    "Kolkata",
+    "Pune",
+  ]);
+  const [activeField, setActiveField] = useState(null);
+  const vehiclePanelRef = useRef(null);
+  const confirmRidePanelRef = useRef(null);
+  const [confirmRidePanel, setConfirmRidePanel] = useState(false);
+  // const [vehicleFound, setVehicleFound] = useState(false);
+  // const [vehicleType, setVehicleType] = useState(null);
 
   function submitHandler(e) {
     e.preventDefault();
@@ -43,8 +62,39 @@ function UserHome() {
     [panelOpen]
   );
 
+  useGSAP(
+    function () {
+      if (vehiclePanelOpen) {
+        gsap.to(vehiclePanelRef.current, {
+          transform: "translateY(0)",
+        });
+      } else {
+        gsap.to(vehiclePanelRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [vehiclePanelOpen]
+  );
+
+  useGSAP(
+    function () {
+      if (confirmRidePanel) {
+        gsap.to(confirmRidePanelRef.current, {
+          transform: "translateY(0)",
+        });
+      } else {
+        gsap.to(confirmRidePanelRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [confirmRidePanel]
+  );
+
   function findTrip() {
-    return null;
+    setVehiclePanelOpen(true);
+    setPanelOpen(false);
   }
 
   return (
@@ -114,7 +164,43 @@ function UserHome() {
             Find Trip
           </button>
         </div>
-        <div ref={panelRef} className="h-0 bg-white"></div>
+        <div ref={panelRef} className="h-0 bg-white">
+          <LocationSearchPanel
+            activeField={activeField}
+            suggestions={
+              activeField === "pickup"
+                ? pickupSuggestions
+                : destinationSuggestions
+            }
+            setVehiclePanelOpen={setVehiclePanelOpen}
+            setPickup={setPickup}
+            setDestination={setDestination}
+            setPanelOpen={setPanelOpen}
+          ></LocationSearchPanel>
+        </div>
+      </div>
+      <div
+        ref={vehiclePanelRef}
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+      >
+        <VehiclePanel
+          setVehiclePanel={setVehiclePanelOpen}
+          setConfirmRidePanel={setConfirmRidePanel}
+        ></VehiclePanel>
+      </div>
+      <div
+        ref={confirmRidePanelRef}
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+      >
+        <ConfirmRide
+          // createRide={createRide}
+          pickup={pickup}
+          destination={destination}
+          // fare={fare}
+          // vehicleType={vehicleType}
+          setConfirmRidePanel={setConfirmRidePanel}
+          // setVehicleFound={setVehicleFound}
+        />
       </div>
     </div>
   );
