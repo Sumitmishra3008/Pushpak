@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CaptainDataContext } from "../context/CaptainDataContext";
+import { CaptainDataContext } from "../context/CapatainContext";
 import { set } from "zod/v4";
 // import { useNavigate } from "react-router-dom";
 

@@ -3,13 +3,13 @@ import React from "react";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CaptainDataContext } from "../context/CaptainDataContext";
+import { CaptainDataContext } from "../context/CapatainContext";
 // import { useNavigate } from "react-router-dom";
 
 function CaptainSignin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { captainData, setCaptainData } = useContext(CaptainDataContext);
+  const { updateCaptain, setCaptain } = useContext(CaptainDataContext);
   const navigate = useNavigate();
 
   //   const [newUser, setNewUser] = useState({});
@@ -31,7 +31,9 @@ function CaptainSignin() {
       const data = response.data;
       console.log(data);
       localStorage.setItem("token", data.token);
-      setCaptainData(data.captain);
+      // update captain in context (provider uses `captain` / `setCaptain` / `updateCaptain`)
+      if (updateCaptain) updateCaptain(data.captain);
+      else if (setCaptain) setCaptain(data.captain);
       navigate("/captainhome");
     } else {
       console.log(message);
@@ -43,11 +45,11 @@ function CaptainSignin() {
     setPassword("");
   };
   return (
-    <div class="h-screen w-full flex flex-col justify-between">
-      <div class="bg-black text-3xl text-white px-8 py-4 font-semibold w-full">
+    <div className="h-screen w-full flex flex-col justify-between">
+      <div className="bg-black text-3xl text-white px-8 py-4 font-semibold w-full">
         Ubergo
       </div>
-      <form onSubmit={submithandler} class="px-3 py-4 w-full gap-3">
+      <form onSubmit={submithandler} className="px-3 py-4 w-full gap-3">
         <p class="font-semibold ">What's your email address?</p>
         <input
           type="email"
@@ -67,16 +69,13 @@ function CaptainSignin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button class="text-white bg-black text-center w-full text-1.5xl  py-2 rounded-md">
+        <button className="text-white bg-black text-center w-full text-1.5xl  py-2 rounded-md">
           Sign in
         </button>
       </form>
       <div>
         <p class="text-center">Haven't joined the fleet of captains yet ?</p>
-        <Link
-          to="/Captainsignup"
-          class="   bg-[#b44910] flex items-center justify-center text-white font-semibold mb-5 rounded-lg px-4 py-2 w-0.8 text-lg placeholder:text-base"
-        >
+        <Link to="/captainsignup" className="bg-[#b44910] flex items-center justify-center text-white font-semibold mb-5 rounded-lg px-4 py-2 w-0.8 text-lg placeholder:text-base">
           signup as captain
         </Link>
       </div>
